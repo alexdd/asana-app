@@ -24,79 +24,25 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y openjdk-17-jdk git unzip zip wget
-    
-    - name: Setup Android SDK
-      run: |
-        mkdir -p $HOME/Android/Sdk/cmdline-tools
-        cd $HOME/Android/Sdk/cmdline-tools
-        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip commandlinetools-linux-11076708_latest.zip
-        mv cmdline-tools latest
-        rm commandlinetools-linux-11076708_latest.zip
-        
-        export ANDROID_HOME=$HOME/Android/Sdk
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-        
-        cd $ANDROID_HOME/cmdline-tools/latest/bin
-        yes | ./sdkmanager --licenses
-        ./sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-        
-        echo "ANDROID_HOME=$HOME/Android/Sdk" >> $GITHUB_ENV
-        echo "$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
-      
-    - name: Install Python Dependencies
-      run: |
+        sudo apt-get install -y git unzip openjdk-17-jdk zip
         python -m pip install --upgrade pip
         pip install buildozer cython
-    
-    - name: Accept SDK licenses before Buildozer
+      
+    - name: Accept Android Licenses
       run: |
         mkdir -p $HOME/.android/licenses
         echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $HOME/.android/licenses/android-sdk-license
         echo "601085b94cd77f0b54ff86406957099ebe79c4d6" > $HOME/.android/licenses/android-sdk-license-google
-        echo "84831b9409646a918e30573bab4c9c91346d8abd" > $HOME/.android/licenses/android-sdk-preview-license
-        echo "d975f751698a77b662f1254ddbeed3901e976f5a" > $HOME/.android/licenses/android-sdk-arm-dbt-license
-        echo "8415be50cd9bf7a4b2ea37485c8f3b7ec49f5866" > $HOME/.android/licenses/android-sdk-arm-dbt-license-5.3.1
-        echo "2633d38f943099e9c8e31030b7c4f0cbf976d60b" > $HOME/.android/licenses/android-sdk-arm-dbt-license-6.0
-        echo "601085b94cd77f0b54ff86406957099ebe79c4d6" > $HOME/.android/licenses/android-sdk-license-google-services
-        
-        # Also create in buildozer's location
-        mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
-        cp $HOME/.android/licenses/* $HOME/.buildozer/android/platform/android-sdk/licenses/ 2>/dev/null || true
-    
-    - name: Initialize Buildozer SDK
-      run: |
-        cd $GITHUB_WORKSPACE
-        buildozer android update
-    
-    - name: Install Build Tools in Buildozer SDK
-      run: |
-        # Change to buildozer's SDK directory after update created it
-        cd $HOME/.buildozer/android/platform/android-sdk
-        
-        # Install command-line tools in the old style structure (tools/)
-        mkdir -p tools/bin
-        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O /tmp/tools.zip
-        unzip /tmp/tools.zip -d /tmp/
-        mv /tmp/cmdline-tools/bin/* tools/bin/
-        rm -rf /tmp/cmdline-tools
-        
-        # Also copy to cmdline-tools for sdkmanager
-        mkdir -p cmdline-tools/latest/bin
-        cp tools/bin/* cmdline-tools/latest/bin/
-        
-        # Accept all licenses automatically
-        yes | cmdline-tools/latest/bin/sdkmanager --licenses
-        
-        # Install build tools
-        cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "build-tools;36.1.0"
         
     - name: Build APK
       run: |
-        cd $GITHUB_WORKSPACE
         buildozer android clean
         buildozer android debug
+      env:
+        P4A_RELEASE_KEYSTORE: ${{ secrets.P4A_RELEASE_KEYSTORE }}
+        P4A_RELEASE_KEYSTORE_PASSWD: ${{ secrets.P4A_RELEASE_KEYSTORE_PASSWD }}
+        P4A_RELEASE_KEYALIAS: ${{ secrets.P4A_RELEASE_KEYALIAS }}
+        P4A_RELEASE_KEYALIAS_PASSWD: ${{ secrets.P4A_RELEASE_KEYALIAS_PASSWD }}
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
@@ -112,4 +58,3 @@ jobs:
         files: bin/*.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
