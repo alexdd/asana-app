@@ -34,8 +34,14 @@ jobs:
         
     - name: Accept SDK Licenses
       run: |
-        yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-        yes | $HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
+        # Find sdkmanager and accept licenses
+        SDKMANAGER=$(find $HOME/.buildozer/android/platform/android-sdk -name sdkmanager 2>/dev/null | head -1)
+        if [ -n "$SDKMANAGER" ]; then
+          echo "Found sdkmanager at: $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses
+        else
+          echo "Warning: sdkmanager not found"
+        fi
         
     - name: Build APK
       run: |
