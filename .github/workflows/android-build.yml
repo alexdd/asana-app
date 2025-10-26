@@ -28,31 +28,31 @@ jobs:
         python -m pip install --upgrade pip
         pip install buildozer cython
       
-    - name: Pre-accept Android Licenses
+    - name: Setup Android SDK and Accept Licenses
       run: |
+        # Install temporary Android SDK to accept licenses
+        mkdir -p /tmp/android-sdk/cmdline-tools
+        cd /tmp/android-sdk/cmdline-tools
+        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip commandlinetools-linux-11076708_latest.zip
+        mv cmdline-tools latest
+        rm commandlinetools-linux-11076708_latest.zip
+        
+        # Accept all licenses with yes |
+        yes | latest/bin/sdkmanager --licenses
+        
+        # Copy accepted licenses to home directory so buildozer finds them
         mkdir -p $HOME/.android/licenses
-        # Accept all common SDK licenses
-        echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $HOME/.android/licenses/android-sdk-license
-        echo "601085b94cd77f0b54ff86406957099ebe79c4d6" > $HOME/.android/licenses/android-sdk-license-google
-        echo "84831b9409646a918e30573bab4c9c91346d8abd" > $HOME/.android/licenses/android-sdk-preview-license
-        # Also copy to buildozer location
-        mkdir -p $HOME/.buildozer/android/platform/android-sdk/licenses
-        cp $HOME/.android/licenses/* $HOME/.buildozer/android/platform/android-sdk/licenses/ 2>/dev/null || true
+        find /tmp/android-sdk -name "android-sdk*" -o -name "*license*" | head -20 | while read license_file; do
+          if [ -f "$license_file" ]; then
+            basename=$(basename "$license_file")
+            echo "$license_file" > "$HOME/.android/licenses/${basename}_accepted"
+          fi
+        done || true
         
     - name: Initialize Buildozer
       run: |
         buildozer android update
-        
-    - name: Accept SDK Licenses
-      run: |
-        # Find sdkmanager and accept licenses with yes |
-        SDKMANAGER=$(find $HOME/.buildozer/android/platform/android-sdk -name sdkmanager 2>/dev/null | head -1)
-        if [ -n "$SDKMANAGER" ]; then
-          echo "Found sdkmanager at: $SDKMANAGER"
-          yes | "$SDKMANAGER" --licenses
-        else
-          echo "Warning: sdkmanager not found"
-        fi
         
     - name: Build APK
       run: |
