@@ -52,14 +52,12 @@ jobs:
         
     - name: Initialize Buildozer
       run: |
-        cd /tmp/android-sdk/cmdline-tools/latest/bin
-        yes | ./sdkmanager --licenses
+        cd $GITHUB_WORKSPACE
         buildozer android update
         
     - name: Build APK
       run: |
-        cd /tmp/android-sdk/cmdline-tools/latest/bin
-        yes | ./sdkmanager --licenses
+        cd $GITHUB_WORKSPACE
         buildozer android clean
         buildozer android debug
       env:
