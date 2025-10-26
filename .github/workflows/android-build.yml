@@ -68,14 +68,11 @@ jobs:
         rm commandlinetools-linux-11076708_latest.zip
         cd bin
         
-        # Accept all licenses automatically (send y 10 times for multiple licenses)
-        echo -e "y\ny\ny\ny\ny\ny\ny\ny\ny\ny" | ./sdkmanager --licenses || true
+        # Accept all licenses automatically
+        yes | ./sdkmanager --licenses
         
-        # Install build tools (try multiple times to ensure installation)
-        ./sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
-        
-        # Try to install build-tools 36.1.0 if buildozer needs it
-        ./sdkmanager "build-tools;36.1.0" || echo "Failed to install 36.1.0, continuing..."
+        # Install build tools
+        ./sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "build-tools;36.1.0"
         
     - name: Build APK
       run: |
