@@ -38,6 +38,15 @@ jobs:
       run: |
         buildozer android update
         
+    - name: Accept SDK Licenses
+      run: |
+        # Accept licenses using buildozer's sdkmanager if available
+        if [ -f "$HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager" ]; then
+          yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
+        elif [ -f "$HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager" ]; then
+          yes | $HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
+        fi
+        
     - name: Build APK
       run: |
         buildozer android clean
