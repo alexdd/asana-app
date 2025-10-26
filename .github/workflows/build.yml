@@ -35,9 +35,19 @@ jobs:
             build-essential autoconf libtool pkg-config
       
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          api-level: '31'
+        run: |
+          sudo mkdir -p /opt/android-sdk/cmdline-tools
+          cd /tmp
+          wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
+          unzip tools.zip
+          sudo mv cmdline-tools /opt/android-sdk/cmdline-tools/latest
+          rm tools.zip
+      
+      - name: Setup Android environment
+        run: |
+          echo "ANDROID_HOME=/opt/android-sdk" >> $GITHUB_ENV
+          echo "/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools" >> $GITHUB_PATH
+          yes | sdkmanager --sdk_root=/opt/android-sdk "platform-tools" "platforms;android-31" "build-tools;31.0.0" || true
       
       - name: Install buildozer
         run: |
