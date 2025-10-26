@@ -15,51 +15,12 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
       
-    - name: Setup Python
-      uses: actions/setup-python@v5
+    - name: Build with Buildozer
+      uses: ArtemSBulgakov/buildozer-action@v1
+      id: buildozer
       with:
-        python-version: '3.11'
-        cache: 'pip'
-        
-    - name: Install Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y git unzip openjdk-17-jdk zip
-        python -m pip install --upgrade pip
-        pip install buildozer cython
-      
-    - name: Setup Android SDK and Accept Licenses
-      run: |
-        # Install temporary Android SDK to accept licenses
-        mkdir -p /tmp/android-sdk/cmdline-tools
-        cd /tmp/android-sdk/cmdline-tools
-        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-        unzip commandlinetools-linux-11076708_latest.zip
-        mv cmdline-tools latest
-        rm commandlinetools-linux-11076708_latest.zip
-        
-        # Accept all licenses with yes |
-        yes | latest/bin/sdkmanager --licenses
-        
-        # Copy accepted licenses to home directory so buildozer finds them
-        mkdir -p $HOME/.android/licenses
-        find /tmp/android-sdk -name "android-sdk*" -o -name "*license*" | head -20 | while read license_file; do
-          if [ -f "$license_file" ]; then
-            basename=$(basename "$license_file")
-            echo "$license_file" > "$HOME/.android/licenses/${basename}_accepted"
-          fi
-        done || true
-        
-    - name: Initialize Buildozer
-      run: |
-        cd $GITHUB_WORKSPACE
-        buildozer android update
-        
-    - name: Build APK
-      run: |
-        cd $GITHUB_WORKSPACE
-        buildozer android clean
-        buildozer android debug
+        workdir: .
+        buildozer_version: stable
       env:
         P4A_RELEASE_KEYSTORE: ${{ secrets.P4A_RELEASE_KEYSTORE }}
         P4A_RELEASE_KEYSTORE_PASSWD: ${{ secrets.P4A_RELEASE_KEYSTORE_PASSWD }}
