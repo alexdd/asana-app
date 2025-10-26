@@ -49,11 +49,32 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install buildozer cython
+    
+    - name: Initialize Buildozer SDK
+      run: |
+        cd $GITHUB_WORKSPACE
+        buildozer android update
+    
+    - name: Install Build Tools in Buildozer SDK
+      run: |
+        mkdir -p $HOME/.buildozer/android/platform/android-sdk
+        cd $HOME/.buildozer/android/platform/android-sdk
+        
+        # Download and extract command-line tools into buildozer's SDK
+        mkdir -p cmdline-tools/latest
+        cd cmdline-tools/latest
+        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+        unzip commandlinetools-linux-11076708_latest.zip
+        rm commandlinetools-linux-11076708_latest.zip
+        cd bin
+        
+        # Accept licenses and install build tools
+        yes | ./sdkmanager --licenses
+        ./sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
         
     - name: Build APK
       run: |
         cd $GITHUB_WORKSPACE
-        buildozer android update
         buildozer android clean
         buildozer android debug
         
