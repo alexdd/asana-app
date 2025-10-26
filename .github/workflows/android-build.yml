@@ -22,7 +22,7 @@ jobs:
     - name: Install Dependencies  
       run: |
         sudo apt-get update
-        sudo apt-get install -y git unzip openjdk-17-jdk zip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5
+        sudo apt-get install -y git unzip openjdk-17-jdk zip python3-pip autoconf libtool pkg-config zlib1g-dev libncurses6-dev libncursesw6-dev
         pip install buildozer cython
         
     - name: Accept Licenses and Build
