@@ -2,15 +2,6 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
-    inputs:
-      build_type:
-        description: 'Build type'
-        required: true
-        default: 'debug'
-        type: choice
-        options:
-          - debug
-          - release
 
 jobs:
   build-android:
@@ -19,52 +10,42 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@692b82f8d88132e5bc9e3138c29e5fe19cc4b991
+        uses: actions/checkout@v4
       
       - name: Set up Python
-        uses: actions/setup-python@55f526102b3a250fed3ba9e1d329f3a31fb20e88
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
       
-      - name: Install system dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git zip unzip openjdk-17-jdk \
-            libncurses6 libncurses6-dev \
-            zlib1g-dev libffi-dev libssl-dev \
-            build-essential autoconf libtool pkg-config
-      
-      - name: Setup Android SDK
-        run: |
-          sudo mkdir -p /opt/android-sdk/cmdline-tools
-          cd /tmp
-          wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
-          unzip tools.zip
-          sudo mv cmdline-tools /opt/android-sdk/cmdline-tools/latest
-          rm tools.zip
-      
-      - name: Setup Android environment
-        run: |
-          echo "ANDROID_HOME=/opt/android-sdk" >> $GITHUB_ENV
-          echo "/opt/android-sdk/cmdline-tools/latest/bin:/opt/android-sdk/platform-tools" >> $GITHUB_PATH
-          yes | sdkmanager --sdk_root=/opt/android-sdk "platform-tools" "platforms;android-31" "build-tools;31.0.0" || true
-      
-      - name: Install buildozer
-        run: |
+          sudo apt-get install -y git openjdk-17-jdk unzip wget
           python -m pip install --upgrade pip
           pip install buildozer cython
       
+      - name: Setup Android SDK
+        run: |
+          mkdir -p $HOME/Android/Sdk/cmdline-tools
+          cd $HOME/Android/Sdk/cmdline-tools
+          wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip commandlinetools-linux-11076708_latest.zip
+          mv cmdline-tools latest
+          rm commandlinetools-linux-11076708_latest.zip
+          export ANDROID_HOME=$HOME/Android/Sdk
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+          cd $HOME/Android/Sdk/cmdline-tools/latest/bin
+          yes | ./sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+      
       - name: Build APK
         run: |
-          buildozer android ${{ github.event.inputs.build_type || 'debug' }}
-        env:
-          P4A_RELEASE_KEYSTORE: ${{ secrets.P4A_RELEASE_KEYSTORE }}
-          P4A_RELEASE_KEYSTORE_PASSWD: ${{ secrets.P4A_RELEASE_KEYSTORE_PASSWD }}
-          P4A_RELEASE_KEYALIAS: ${{ secrets.P4A_RELEASE_KEYALIAS }}
-          P4A_RELEASE_KEYALIAS_PASSWD: ${{ secrets.P4A_RELEASE_KEYALIAS_PASSWD }}
+          export ANDROID_HOME=$HOME/Android/Sdk
+          export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
+          cd $GITHUB_WORKSPACE
+          buildozer android debug
       
       - name: Upload APK
-        uses: actions/upload-artifact@5e3b3f77c44e074ee61d47cebc96d0f0e8c06d68
+        uses: actions/upload-artifact@v4
         with:
-          name: yoga-asana-timer-apk
+          name: apk
           path: bin/*.apk

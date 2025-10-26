@@ -116,7 +116,7 @@ fullscreen = 0
 # android.presplash_lottie = &lt;duration&gt;:&lt;path/to/animation.json&gt;
 
 # (int) target Android API, should be as high as possible. Default: 31
-android.api = 31
+android.api = 33
 
 # (int) Minimum API your APK will support. Default: 21
 #android.minapi = 21
