@@ -55,6 +55,20 @@ jobs:
         cd $GITHUB_WORKSPACE
         buildozer android update
     
+    - name: Accept Buildozer licenses
+      run: |
+        # Create licenses directory
+        mkdir -p $HOME/.android
+        touch $HOME/.android/licenses
+        
+        # Accept all SDK licenses automatically
+        echo -e "\n24333f8a63b6825ea9c5514f83c2829b004d1fee" > $HOME/.android/licenses/android-sdk-license
+        echo -e "\n601085b94cd77f0b54ff86406957099ebe79c4d6" > $HOME/.android/licenses/android-sdk-license-google
+        echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > $HOME/.android/licenses/android-sdk-preview-license
+        echo -e "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $HOME/.android/licenses/android-sdk-license
+        echo -e "601085b94cd77f0b54ff86406957099ebe79c4d6" > $HOME/.android/licenses/android-sdk-license-google
+        echo -e "84831b9409646a918e30573bab4c9c91346d8abd" > $HOME/.android/licenses/android-sdk-preview-license
+    
     - name: Install Build Tools in Buildozer SDK
       run: |
         mkdir -p $HOME/.buildozer/android/platform/android-sdk
@@ -68,9 +82,10 @@ jobs:
         rm commandlinetools-linux-11076708_latest.zip
         cd bin
         
-        # Accept licenses and install build tools
-        yes | ./sdkmanager --licenses
-        ./sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+        # Accept licenses
+        yes | ./sdkmanager --licenses || true
+        # Install build tools
+        yes Y | ./sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0" "build-tools;36.1.0" || true
         
     - name: Build APK
       run: |
