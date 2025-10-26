@@ -36,7 +36,7 @@ jobs:
             libltdl-dev libffi-dev libssl-dev python3-dev
       
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v3.1.0
         with:
           api-level: '31'
       
@@ -54,7 +54,7 @@ jobs:
           P4A_RELEASE_KEYALIAS: ${{ secrets.P4A_RELEASE_KEYALIAS }}
           P4A_RELEASE_KEYALIAS_PASSWD: ${{ secrets.P4A_RELEASE_KEYALIAS_PASSWD }}
       
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: yoga-asana-timer-apk
