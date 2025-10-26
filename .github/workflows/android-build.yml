@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # Manueller Trigger via GitHub UI
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,33 +28,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install buildozer cython
       
-    - name: Pre-accept Android Licenses
-      run: |
-        mkdir -p $HOME/.android/licenses
-        # Create license files with all necessary hashes
-        echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > $HOME/.android/licenses/android-sdk-license
-        echo "601085b94cd77f0b54ff86406957099ebe79c4d6" > $HOME/.android/licenses/android-sdk-license-google
-        echo "84831b9409646a918e30573bab4c9c91346d8abd" > $HOME/.android/licenses/android-sdk-preview-license
-        echo "d975f751698a77b662f1254ddbeed3901e976f5a" > $HOME/.android/licenses/android-sdk-arm-dbt-license
-        echo "8415be50cd9bf7a4b2ea37485c8f3b7ec49f5866" > $HOME/.android/licenses/android-sdk-arm-dbt-license-5.3.1
-        echo "2633d38f943099e9c8e31030b7c4f0cbf976d60b" > $HOME/.android/licenses/android-sdk-arm-dbt-license-6.0
-        
     - name: Initialize Buildozer
       run: |
-        # Set timeout for buildozer update
-        timeout 1800 buildozer android update || true
+        buildozer android update
         
-    - name: Force Accept All Licenses
+    - name: Accept SDK Licenses
       run: |
-        # Find sdkmanager in buildozer's SDK and accept licenses
-        SDK_DIR="$HOME/.buildozer/android/platform/android-sdk"
-        if [ -f "$SDK_DIR/cmdline-tools/latest/bin/sdkmanager" ]; then
-          yes | "$SDK_DIR/cmdline-tools/latest/bin/sdkmanager" --licenses || true
-        fi
-        # Also try the old location
-        if [ -f "$SDK_DIR/tools/bin/sdkmanager" ]; then
-          yes | "$SDK_DIR/tools/bin/sdkmanager" --licenses || true
-        fi
+        yes | $HOME/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+        yes | $HOME/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
         
     - name: Build APK
       run: |
