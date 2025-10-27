@@ -1,66 +1,42 @@
 #!/bin/bash
-# Android Build Script für Yoga Asana Timer
+# Yoga Asana Timer - Android Build Script
+# This script builds the APK in WSL/Ubuntu
+
+set -e  # Exit on error
 
 echo "🧘 Yoga Asana Timer - Android Build"
 echo "===================================="
 
-# Prüfe ob wir in WSL sind
-if [ -z "$WSL_DISTRO_NAME" ]; then
-    echo "⚠️  Dieses Skript sollte in WSL/Ubuntu ausgeführt werden"
-fi
+cd /mnt/c/work/asana-app
 
-# Aktualisiere System
-echo "📦 System aktualisieren..."
-sudo apt update -qq
-sudo apt upgrade -y
+# Accept all necessary licenses
+echo "📜 Accepting Android licenses..."
+mkdir -p ~/.android/licenses
+echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" > ~/.android/licenses/android-sdk-license
+echo "601085b94cd77f0b54ff86406957099ebe79c4d6" > ~/.android/licenses/android-sdk-preview-license
+echo "d56f5187479451eabf01fb78af6dfcb131a6211b" >> ~/.android/licenses/android-sdk-license
+echo "33b8a2de1fa06cd4ef4975e4210084aae9f89aa0" >> ~/.android/licenses/android-sdk-license
+echo "841af874906b3d17be73fe81cf8ae50ff9f13fb7" >> ~/.android/licenses/android-sdk-license
 
-# Python installieren
-echo "🐍 Python installieren..."
-sudo apt install -y python3 python3-pip python3-venv git zip unzip
-
-# Java installieren (für Android SDK)
-echo "☕ Java installieren..."
-sudo apt install -y openjdk-11-jdk
-
-# Android SDK vorbereiten
-echo "📱 Android SDK einrichten..."
-mkdir -p ~/Android/Sdk/cmdline-tools/latest
-
-# Android Command Line Tools herunterladen
-echo "⬇️  Android SDK Tools herunterladen..."
-cd /tmp
-if [ ! -f commandlinetools-linux-latest.zip ]; then
-    wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O commandlinetools-linux-latest.zip
-fi
-
-unzip -q -o commandlinetools-linux-latest.zip -d cmdline-tools
-mv cmdline-tools/* ~/Android/Sdk/cmdline-tools/latest/
-
-# Umgebungsvariablen setzen
-echo "🔧 Umgebungsvariablen konfigurieren..."
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools
-
-grep -q "ANDROID_HOME" ~/.bashrc || echo "export ANDROID_HOME=\$HOME/Android/Sdk" >> ~/.bashrc
-grep -q "Android SDK" ~/.bashrc || echo "export PATH=\$PATH:\$ANDROID_HOME/cmdline-tools/latest/bin:\$ANDROID_HOME/platform-tools" >> ~/.bashrc
-
-# Android SDK installieren
-echo "📥 Android SDK Komponenten installieren (das kann einige Minuten dauern)..."
-yes | sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-31" "build-tools;31.0.0"
-
-# Buildozer installieren
-echo "🔨 Buildozer installieren..."
-pip3 install --user buildozer
+# Set environment variables
 export PATH=$PATH:$HOME/.local/bin
+export ANDROID_HOME=$HOME/Android/Sdk
 
-# Ins Projektverzeichnis wechseln
-cd /mnt/c/work/asana-app || cd $(dirname "$0")
+# Build with automatic "y" confirmation
+echo ""
+echo "🔨 Starting build (this may take 30-60 minutes for first build)..."
+echo ""
+echo "y" | buildozer -v android debug
 
-echo ""
-echo "✅ Setup abgeschlossen!"
-echo ""
-echo "Jetzt können Sie das Android APK bauen:"
-echo "  buildozer android debug"
-echo ""
-echo "Die APK-Datei wird in bin/ gespeichert"
-
+# Check if APK was created
+if ls bin/*.apk 1> /dev/null 2>&1; then
+    echo ""
+    echo "✅ Build successful!"
+    ls -lh bin/*.apk
+    echo ""
+    echo "📲 Install with: adb install bin/*.apk"
+else
+    echo ""
+    echo "❌ Build failed. Check logs above."
+    exit 1
+fi

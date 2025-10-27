@@ -38,6 +38,12 @@ version = 1.0
 # comma separated e.g. requirements = sqlite3,kivy
 requirements = python3,kivy
 
+# (str) Python version to use on the host machine (e.g., 3.11)
+# You can override this value with environment variable 'BUILDOZER_PYTHON_VERSION'
+# Uncomment to use Python 3.11 explicitly
+# Python3 host version, absolute path (https://github.com/kivy/python-for-android/pull/2080)
+# p4a.hostpython_home = /usr/bin/python3.11
+
 # (str) Custom source folders for requirements
 #requirements.source.kivy = ../../kivy
 
@@ -116,19 +122,22 @@ fullscreen = 0
 # android.presplash_lottie = &lt;duration&gt;:&lt;path/to/animation.json&gt;
 
 # (int) target Android API, should be as high as possible. Default: 31
-android.api = 33
+android.api = 31
 
 # (int) Minimum API your APK will support. Default: 21
 android.minapi = 21
 
 # (int) Android SDK version to use
-android.sdk = 33
+android.sdk = 30
 
 # (str) Android NDK version to use
 #android.ndk = 23b
 
-# (int) Android SDK version to use
-#android.sdk = 30
+# (bool) Automatically accept SDK licenses
+android.accept_sdk_license = True
+
+# (list) Build tools version to use
+android.build_tools = 34.0.0
 
 # (bool) Use --private data storage (True) or --dir public storage (False)
 #android.private_storage = True
