@@ -1,72 +1,81 @@
-# Yoga Asana Timer
+# Yoga Asana Timer (Android, Jetpack Compose)
 
-Eine elegante Android-App zum Timing von Yoga Asanas mit schlankem Design in Yoga Chakra Farben.
+Eine moderne Android-App zur Verwaltung und Ausführung von Yoga-Sequenzen. Die ursprüngliche Kivy/Buildozer-Basis wurde vollständig durch eine native Kotlin-App ersetzt, die sich lokal zuverlässig als APK bauen lässt.
 
 ## Features
 
-- ✨ **Splash Screen** beim App-Start
-- 📋 **Asana Listen Verwaltung** - Erstelle und verwalte deine eigenen Asana-Sequenzen
-- ⏱️ **Countdown Timer** - Großer Timer für jede Asana
-- ⏸️ **Pause/Weiter** Funktion
-- 🎨 **Chakra-Farben Design** - Elegant und minimalistisch
-- 💾 **Persistente Speicherung** - Deine Listen werden gespeichert
+- Sequenzen mit beliebig vielen Asanas erstellen, bearbeiten und löschen
+- Timer mit Fortschrittsanzeige, Pausieren/Fortsetzen, Vor-/Zurückspringen und Reset
+- Persistente Speicherung der eigenen Sequenzen via Jetpack DataStore
+- Material 3 Oberfläche mit Unterstützung für Light/Dark-Mode
 
-## Installation
+## Tech Stack
 
-### Für die Entwicklung (Desktop)
+- Kotlin 1.9.22
+- Android Gradle Plugin 8.4.0
+- Jetpack Compose (BOM 2024.02.00)
+- Jetpack DataStore (Preferences) + kotlinx.serialization
+- Coroutines für State Management & Timer-Steuerung
 
-```bash
-# Python installieren (3.7+)
-# Dann Kivy installieren:
-pip install -r requirements.txt
+## Voraussetzungen
 
-# App starten:
-python main.py
+- JDK 17 (z. B. Temurin oder Azul Zulu)
+- Android SDK 34 (inkl. Build-Tools 34.0.0)
+- Android Studio Iguana oder aktueller **oder** Android Command Line Tools
+- (Optional) angeschlossenes Gerät oder Emulator für das Debug-APK
+
+## Projektstruktur
+
+```
+asana-app/
+├── app/
+│   ├── build.gradle.kts            # Modul-Konfiguration
+│   ├── src/main/java/com/asana/timer
+│   │   ├── data/                   # Datenmodelle & Repository
+│   │   ├── ui/                     # Compose Navigation & Screens
+│   │   └── ui/theme/               # Farb- & Theme-Setup
+│   └── src/main/res                # Ressourcen (Manifest, Strings, Icons)
+├── build.gradle.kts                # Root Build Skript
+├── gradle/                         # Gradle Wrapper Dateien
+├── gradlew / gradlew.bat           # Wrapper-Skripte
+└── settings.gradle.kts
 ```
 
-### Für Android
+## Lokales Setup
 
-```bash
-# Android SDK und Build Tools installieren
-# Buildozer installieren:
-pip install buildozer
+1. Projekt in Android Studio öffnen oder im Terminal in den Projektordner wechseln.
+2. Pfad zum Android SDK in `local.properties` eintragen (Android Studio erstellt die Datei automatisch):
 
-# Android build erstellen:
-buildozer android debug
+    ```
+    sdk.dir=C:\Users\<user>\AppData\Local\Android\Sdk
+    ```
 
-# Oder für Release:
-buildozer android release
+3. Abhängigkeiten synchronisieren (`Gradle Sync` oder `./gradlew tasks`).
+
+## APK bauen
+
+**Windows PowerShell:**
+
+```powershell
+./gradlew.bat assembleDebug
 ```
 
-## Verwendung
+**macOS / Linux:**
 
-### Neue Asana Liste erstellen
+```bash
+./gradlew assembleDebug
+```
 
-1. Beim Start erscheint die Hauptliste
-2. Drücke auf "[+] Neue Asana Liste erstellen"
-3. Gib einen Namen für deine Liste ein
-4. Füge Asanas hinzu mit Namen und Dauer in Sekunden
-5. Speichere die Liste
+Das signierte Debug-APK liegt anschließend unter `app/build/outputs/apk/debug/app-debug.apk` und kann per `adb install app-debug.apk` installiert werden.
 
-### Timer starten
+## Nützliche Gradle Aufgaben
 
-1. Wähle eine Asana Liste aus der Hauptliste
-2. Die App wechselt automatisch zum Timer-Modus
-3. Die Zeit zählt automatisch herunter
-4. Tippe auf Pause, um anzuhalten
-5. Tippe nochmal, um fortzusetzen
-6. Nutze "Abbrechen" um zur Liste zurückzukehren
+- `./gradlew lint` – statische Analyse
+- `./gradlew test` – Unit Tests (aktuell noch nicht implementiert)
+- `./gradlew clean` – Bereinigt Build-Artefakte
 
-## Vordefinierte Listen
+## Roadmap / Ideen
 
-Die App kommt mit zwei Beispiel-Listen:
-
-1. **Morgendliche Sonnengrüße** - Eine klassische Sonnengrüße Sequenz
-2. **Hüftöffnende Sequenz** - Asanas für die Hüftöffnung
-
-## Technologie
-
-- **Python** mit **Kivy** Framework
-- Minimaler Overhead, einfache Wartung
-- Cross-platform (Desktop & Android)
-
+- Unit-Tests für Repository und Timer-Logik ergänzen
+- Animierte Übergänge & Haptik-Feedback hinzufügen
+- Export/Import der Sequenzen als JSON-Datei ermöglichen
