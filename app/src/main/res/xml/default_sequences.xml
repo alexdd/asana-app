@@ -1,44 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sequences>
     <sequence>
-        <name>Sanfter Morgenflow</name>
+        <name>Mittelstufe klassisch</name>
         <asanas>
             <asana>
-                <title>Cat / Cow</title>
-                <durationSeconds>60</durationSeconds>
+                <title>Anfangsentspannung - Śavāsana</title>
+                <durationSeconds>240</durationSeconds>
+            </asana>  
+            <asana>
+                <title>Oṃ</title>
+                <durationSeconds>180</durationSeconds>
+            </asana>  
+            <asana>
+                <title>Prāṇāyāma</title>
+                <durationSeconds>600</durationSeconds>
+            </asana>  
+            <asana>
+                <title>Sonnengruß - 5 Runden - Sūryanamaskāra</title>
+                <durationSeconds>300</durationSeconds>
             </asana>
             <asana>
-                <title>Downward Dog</title>
-                <durationSeconds>90</durationSeconds>
+                <title>Entspannung Rückenlage - Śavāsana</title>
+                <durationSeconds>30</durationSeconds>
             </asana>
             <asana>
-                <title>Sun Salutation A</title>
+                <title>Bauchmuskelübung - Nāvāsana</title>
                 <durationSeconds>180</durationSeconds>
             </asana>
             <asana>
-                <title>Seated Forward Fold</title>
-                <durationSeconds>120</durationSeconds>
-            </asana>
-        </asanas>
-    </sequence>
-    <sequence>
-        <name>Abendliche Entspannung</name>
-        <asanas>
+                <title>Entspannung Rückenlage - Śavāsana</title>
+                <durationSeconds>30</durationSeconds>
+            </asana>            
             <asana>
-                <title>Child's Pose</title>
-                <durationSeconds>120</durationSeconds>
-            </asana>
+                <title>Kind - Balāsana</title>
+                <durationSeconds>60</durationSeconds>
+            </asana>            
             <asana>
-                <title>Reclined Twist Left</title>
-                <durationSeconds>90</durationSeconds>
-            </asana>
-            <asana>
-                <title>Reclined Twist Right</title>
-                <durationSeconds>90</durationSeconds>
-            </asana>
-            <asana>
-                <title>Savasana</title>
+                <title>Kopfstand - Śīrṣāsana</title>
                 <durationSeconds>240</durationSeconds>
+            </asana>
+            <asana>
+                <title>Kind - Balāsana</title>
+                <durationSeconds>60</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Schulterstand - Sarvāṅgāsana</title>
+                <durationSeconds>180</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Pflug - Halāsana</title>
+                <durationSeconds>120</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Entspannung Rückenlage - Śavāsana</title>
+                <durationSeconds>30</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Fisch - Matsyāsana</title>
+                <durationSeconds>180</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Vorbeuge - Paścimottānāsana</title>
+                <durationSeconds>240</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Schiefe Ebene - Pūrvottānāsana</title>
+                <durationSeconds>20</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Bauchentspannungslage</title>
+                <durationSeconds>60</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Kobra - Bhujaṅgāsana</title>
+                <durationSeconds>60</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Heuschrecke - Śalabhāsana</title>
+                <durationSeconds>60</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Bogen + Schaukelbogen - Dhanurāsana</title>
+                <durationSeconds>120</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Kind - Balāsana</title>
+                <durationSeconds>60</durationSeconds>
+            </asana>                   
+            <asana>
+                <title>Halber Drehsitz - Ardha Matsyendrāsana</title>
+                <durationSeconds>240</durationSeconds>
+            </asana>                   
+            <asana>
+                <title>Krähe - Kākāsana</title>
+                <durationSeconds>180</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Stehende Vorwärtsbeuge - Pāda Hastāsana</title>
+                <durationSeconds>180</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Dreieck - Trikoṇāsana</title>
+                <durationSeconds>240</durationSeconds>
+            </asana>            
+            <asana>
+                <title>Schlussentspannung - Śavāsana</title>
+                <durationSeconds>600</durationSeconds>
             </asana>
         </asanas>
     </sequence>
