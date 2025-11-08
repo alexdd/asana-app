@@ -26,10 +26,12 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = OnPrimary,
     secondary = Secondary,
     onSecondary = OnSecondary,
-    background = Color.Black,
-    onBackground = Color.White,
-    surface = Color(0xFF1C1B1F),
-    onSurface = Color.White,
+    background = DarkBackground,
+    onBackground = DarkTextPrimary,
+    surface = DarkSurface,
+    onSurface = DarkTextPrimary,
+    surfaceVariant = DarkSurfaceVariant,
+    onSurfaceVariant = DarkTextSecondary,
     error = Danger
 )
 

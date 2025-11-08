@@ -1,6 +1,9 @@
 package com.asana.timer.ui.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,36 +21,45 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.asana.timer.ui.theme.Accent
-import com.asana.timer.ui.theme.Background
-import com.asana.timer.ui.theme.Primary
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
     LaunchedEffect(Unit) {
-        delay(1200)
+        delay(5000)
         onFinished()
     }
 
+    val colorScheme = MaterialTheme.colorScheme
+    val context = LocalContext.current
+    
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(Primary, Background, Accent)
+                    colors = listOf(
+                        colorScheme.primary,
+                        colorScheme.background,
+                        colorScheme.secondary
+                    )
                 )
             ),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(horizontal = 32.dp)
+        ) {
             Icon(
                 imageVector = Icons.Filled.SelfImprovement,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onPrimary,
+                tint = colorScheme.onPrimary,
                 modifier = Modifier.size(96.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -55,15 +67,27 @@ fun SplashScreen(onFinished: () -> Unit) {
                 text = "Yoga Asana Timer",
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = colorScheme.onPrimary
                 )
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = "Deine Praxis. Dein Rhythmus.",
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f)
+                    color = colorScheme.onPrimary.copy(alpha = 0.8f)
                 )
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(
+                text = "www.publiziere.de # yoga",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    color = colorScheme.onPrimary.copy(alpha = 0.9f),
+                    textDecoration = TextDecoration.Underline
+                ),
+                modifier = Modifier.clickable {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.stylesheet-entwicklung.de/publiziere/#/yoga"))
+                    context.startActivity(intent)
+                }
             )
         }
     }

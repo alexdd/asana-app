@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asana.timer.data.Asana
 import com.asana.timer.data.AsanaSequence
-import com.asana.timer.ui.theme.SurfaceVariant
 import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -194,7 +193,7 @@ private fun AsanaEditorCard(
     onMoveDown: () -> Unit
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = SurfaceVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

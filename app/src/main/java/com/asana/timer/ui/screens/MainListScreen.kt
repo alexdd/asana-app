@@ -40,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asana.timer.data.AsanaSequence
-import com.asana.timer.ui.theme.SurfaceVariant
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,7 +134,7 @@ private fun SequenceCard(
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = SurfaceVariant)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(

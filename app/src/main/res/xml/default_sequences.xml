@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sequences>
+    <sequence>
+        <name>Sanfter Morgenflow</name>
+        <asanas>
+            <asana>
+                <title>Cat / Cow</title>
+                <durationSeconds>60</durationSeconds>
+            </asana>
+            <asana>
+                <title>Downward Dog</title>
+                <durationSeconds>90</durationSeconds>
+            </asana>
+            <asana>
+                <title>Sun Salutation A</title>
+                <durationSeconds>180</durationSeconds>
+            </asana>
+            <asana>
+                <title>Seated Forward Fold</title>
+                <durationSeconds>120</durationSeconds>
+            </asana>
+        </asanas>
+    </sequence>
+    <sequence>
+        <name>Abendliche Entspannung</name>
+        <asanas>
+            <asana>
+                <title>Child's Pose</title>
+                <durationSeconds>120</durationSeconds>
+            </asana>
+            <asana>
+                <title>Reclined Twist Left</title>
+                <durationSeconds>90</durationSeconds>
+            </asana>
+            <asana>
+                <title>Reclined Twist Right</title>
+                <durationSeconds>90</durationSeconds>
+            </asana>
+            <asana>
+                <title>Savasana</title>
+                <durationSeconds>240</durationSeconds>
+            </asana>
+        </asanas>
+    </sequence>
+</sequences>
+

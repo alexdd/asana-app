@@ -1,5 +1,7 @@
 package com.asana.timer.ui.screens
 
+import android.app.Activity
+import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,6 +59,18 @@ fun TimerScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     var lastError by remember { mutableStateOf<String?>(null) }
+    val view = LocalView.current
+
+    // Keep screen on when timer is running
+    LaunchedEffect(state.isRunning) {
+        val activity = view.context as? Activity ?: return@LaunchedEffect
+        val window = activity.window
+        if (state.isRunning) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
 
     LaunchedEffect(state.errorMessage) {
         val newError = state.errorMessage
