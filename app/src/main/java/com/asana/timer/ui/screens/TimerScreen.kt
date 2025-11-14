@@ -163,6 +163,14 @@ private fun TimerContent(
                 text = currentAsana?.title ?: "Bereit",
                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold)
             )
+            if (!currentAsana?.description.isNullOrBlank()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = currentAsana?.description ?: "",
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Start
+                )
+            }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = formatTime(state.remainingSeconds.takeIf { state.currentIndex >= 0 } ?: currentAsana?.durationSeconds ?: 0),

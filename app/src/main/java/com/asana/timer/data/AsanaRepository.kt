@@ -112,6 +112,7 @@ class AsanaRepository(context: Context) {
             var sequenceName: String? = null
             var asanaTitle: String? = null
             var asanaDuration: Int? = null
+            var asanaDescription: String? = null
             var currentElement: String? = null
 
             while (eventType != XmlResourceParser.END_DOCUMENT) {
@@ -126,6 +127,7 @@ class AsanaRepository(context: Context) {
                             "asana" -> {
                                 asanaTitle = null
                                 asanaDuration = null
+                                asanaDescription = null
                             }
                         }
                     }
@@ -136,6 +138,7 @@ class AsanaRepository(context: Context) {
                                 "name" -> sequenceName = text
                                 "title" -> asanaTitle = text
                                 "durationSeconds" -> asanaDuration = text.toIntOrNull()
+                                "description" -> asanaDescription = text
                             }
                         }
                     }
@@ -146,7 +149,8 @@ class AsanaRepository(context: Context) {
                                     currentSequence.add(
                                         Asana(
                                             title = asanaTitle,
-                                            durationSeconds = asanaDuration
+                                            durationSeconds = asanaDuration,
+                                            description = asanaDescription ?: ""
                                         )
                                     )
                                 }

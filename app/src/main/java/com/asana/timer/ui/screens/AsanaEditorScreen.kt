@@ -67,7 +67,12 @@ fun AsanaEditorScreen(
             asanaItems += EditableAsana()
         } else {
             asanaItems += sequence.asanas.map {
-                EditableAsana(id = it.id, title = it.title, duration = it.durationSeconds.toString())
+                EditableAsana(
+                    id = it.id,
+                    title = it.title,
+                    duration = it.durationSeconds.toString(),
+                    description = it.description
+                )
             }
         }
     }
@@ -222,6 +227,15 @@ private fun AsanaEditorCard(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedTextField(
+                value = state.description,
+                onValueChange = { onUpdate(state.copy(description = it)) },
+                label = { Text("Ansage / Beschreibung") },
+                modifier = Modifier.fillMaxWidth(),
+                minLines = 2,
+                maxLines = 4
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
             Row(
@@ -247,7 +261,8 @@ private fun AsanaEditorCard(
 private data class EditableAsana(
     val id: String = UUID.randomUUID().toString(),
     val title: String = "",
-    val duration: String = "60"
+    val duration: String = "60",
+    val description: String = ""
 )
 
 private data class ValidationResult(
@@ -281,7 +296,8 @@ private fun buildSequence(
         parsedAsanas += Asana(
             id = item.id,
             title = item.title.trim(),
-            durationSeconds = duration
+            durationSeconds = duration,
+            description = item.description.trim()
         )
     }
 

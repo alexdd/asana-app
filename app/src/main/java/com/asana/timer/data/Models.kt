@@ -7,7 +7,8 @@ import java.util.UUID
 data class Asana(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
-    val durationSeconds: Int
+    val durationSeconds: Int,
+    val description: String = ""
 )
 
 @Serializable
