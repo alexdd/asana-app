@@ -133,24 +133,41 @@ class AsanaRepository(context: Context) {
                     }
                     XmlResourceParser.TEXT -> {
                         val text = parser.text.trim()
-                        if (text.isNotEmpty()) {
-                            when (currentElement) {
-                                "name" -> sequenceName = text
-                                "title" -> asanaTitle = text
-                                "durationSeconds" -> asanaDuration = text.toIntOrNull()
-                                "description" -> asanaDescription = text
+                        when (currentElement) {
+                            "name" -> {
+                                if (text.isNotEmpty()) sequenceName = text
+                            }
+                            "title" -> {
+                                if (text.isNotEmpty()) asanaTitle = text
+                            }
+                            "durationSeconds" -> {
+                                asanaDuration = text.toIntOrNull()
+                            }
+                            "description" -> {
+                                // Auch leere Beschreibungen werden übernommen
+                                asanaDescription = text
+                                android.util.Log.d("AsanaRepository", "Description gefunden: '$text' für Asana: $asanaTitle")
                             }
                         }
                     }
                     XmlResourceParser.END_TAG -> {
                         when (parser.name) {
+                            "description" -> {
+                                // Stelle sicher, dass description gesetzt wird, auch wenn TEXT-Event leer war
+                                if (asanaDescription == null) {
+                                    asanaDescription = ""
+                                    android.util.Log.d("AsanaRepository", "Description END_TAG: description auf leeren String gesetzt")
+                                }
+                            }
                             "asana" -> {
                                 if (asanaTitle != null && asanaDuration != null && currentSequence != null) {
+                                    val finalDescription = asanaDescription ?: ""
+                                    android.util.Log.d("AsanaRepository", "Asana erstellt: title='$asanaTitle', description='$finalDescription'")
                                     currentSequence.add(
                                         Asana(
                                             title = asanaTitle,
                                             durationSeconds = asanaDuration,
-                                            description = asanaDescription ?: ""
+                                            description = finalDescription
                                         )
                                     )
                                 }

@@ -5,135 +5,144 @@
         <asanas>
             <asana>
                 <title>Anfangsentspannung - Śavāsana</title>
-                <durationSeconds>240</durationSeconds>
-                <description></description>
+                <durationSeconds>260</durationSeconds>
+                <description>Ankommen, Bauchatmung, Progressive Muskelentspannung, Affirmation</description>
             </asana>  
             <asana>
                 <title>Oṃ</title>
                 <durationSeconds>180</durationSeconds>
-                <description></description>
+                <description>Oṃ Śānti und Frieden</description>
             </asana>  
             <asana>
-                <title>Prāṇāyāma</title>
+                <title>Prāṇāyāma - Kapālabhāti - Schnellatmung</title>
                 <durationSeconds>600</durationSeconds>
-                <description></description>
+                <description>Strahlender Schädel, scheinender Kopf, 3 Runden 40:60:80. Fokus auf Maṇipūra Chakra.</description>
+            </asana>  
+            <asana>
+                <title>Prāṇāyāma - Anuloma Viloma - Wechselatmung</title>
+                <durationSeconds>600</durationSeconds>
+                <description>Harmonisierung der Energie, linke Seite weibliche, passive Yin Energie, rechte Seite männliche, aktive Yang Energie.</description>
             </asana>  
             <asana>
                 <title>Sonnengruß - 5 Runden - Sūryanamaskāra</title>
-                <durationSeconds>300</durationSeconds>
-                <description></description>
+                <durationSeconds>320</durationSeconds>
+                <description>Erste Runde vormachen, dann schneller werden.</description>
             </asana>
             <asana>
                 <title>Entspannung Rückenlage - Śavāsana</title>
                 <durationSeconds>30</durationSeconds>
-                <description></description>
+                <description>Tiefe Bauchatmung, Einatmen hebt sich der Bauch, Ausatmen senkt ihn wieder.</description>
             </asana>
             <asana>
                 <title>Bauchmuskelübung - Nāvāsana</title>
                 <durationSeconds>180</durationSeconds>
-                <description></description>
+                <description>Rücken- und Bauchmuskulatur, hinterer Oberschenkel, Willen, Durchhalten, Maṇipūra, Anāhata Chakra.</description>
             </asana>
             <asana>
                 <title>Entspannung Rückenlage - Śavāsana</title>
                 <durationSeconds>30</durationSeconds>
-                <description></description>
+                <description>Entspannungsimpuls, Stresshormone abgebaut, Glückshormone produziert, Immunsystem angeregt.</description>
             </asana>            
             <asana>
                 <title>Kind - Balāsana</title>
                 <durationSeconds>60</durationSeconds>
-                <description></description>
+                <description>Rückenmuskeln gedehnt, Massage der Bauchorgane, Urvertrauen, Demut, Loslassen, Sonnengeflecht aktiviert, Energien harmonisiert.</description>
             </asana>            
             <asana>
                 <title>Kopfstand - Śīrṣāsana</title>
-                <durationSeconds>240</durationSeconds>
-                <description></description>
+                <durationSeconds>260</durationSeconds>
+                <description>Gegen Krampfadern, Verstopfung, wirkt verjüngend, Konzentration, geistige Klarheit, Energien in spirituelle Energien umwandeln.</description>
             </asana>
             <asana>
                 <title>Kind - Balāsana</title>
                 <durationSeconds>60</durationSeconds>
-                <description></description>
-            </asana>            
+                <description>Rückenmuskeln gedehnt, Massage der Bauchorgane, Urvertrauen, Demut, Loslassen, Sonnengeflecht aktiviert, Energien harmonisiert.</description>
+            </asana>        
             <asana>
                 <title>Schulterstand - Sarvāṅgāsana</title>
                 <durationSeconds>180</durationSeconds>
-                <description></description>
+                <description>Schilddrüsenfunktion normalisieren, flexible Wirbelsäule, Stellung aller Teile, Gefühl der Ganzheit, Viśuddha Chakra</description>
             </asana>            
             <asana>
                 <title>Pflug - Halāsana</title>
                 <durationSeconds>120</durationSeconds>
-                <description></description>
+                <description>Verspannungen im Schulter- / Nackenbereich, Kraft für langfristige Veränderungen, Harmonisierend und ausgleichend.</description>
             </asana>            
             <asana>
                 <title>Entspannung Rückenlage - Śavāsana</title>
                 <durationSeconds>30</durationSeconds>
-                <description></description>
-            </asana>            
+                <description>Entspannungsimpuls, Stresshormone abgebaut, Glückshormone produziert, Immunsystem angeregt.</description>
+            </asana>             
             <asana>
                 <title>Fisch - Matsyāsana</title>
                 <durationSeconds>180</durationSeconds>
-                <description></description>
+                <description>Stärkung der oberen Rückenmuskulatur, gegen Rundrücken, Emotionale Spannungen abgebaut, Freiheit, Offenheit, Freude, Lebenskraft</description>
             </asana>            
             <asana>
                 <title>Vorbeuge - Paścimottānāsana</title>
-                <durationSeconds>240</durationSeconds>
-                <description></description>
+                <durationSeconds>260</durationSeconds>
+                <description>Bauchorgane, Nieren, Abwehrkräfte, Sehnen Kniebeuge, Geduld, Loslassen, Öffnung der Suṣumnā, Kuṇḍalinī erwecken.</description>
             </asana>            
             <asana>
                 <title>Schiefe Ebene - Pūrvottānāsana</title>
-                <durationSeconds>20</durationSeconds>
-                <description></description>
+                <durationSeconds>30</durationSeconds>
+                <description>Stärkung der Arme und Beine, Entschlusskraft, Willenskraft, Lösen vom Irdischen, Energiefeld Körpervorderseite.</description>
             </asana>            
             <asana>
                 <title>Bauchentspannungslage</title>
                 <durationSeconds>60</durationSeconds>
-                <description></description>
+                <description>Bauchorgane massiert, Verbindung zu Mutter Erde, Gefühl der Geborgenheit</description>
             </asana>            
             <asana>
                 <title>Kobra - Bhujaṅgāsana</title>
                 <durationSeconds>60</durationSeconds>
-                <description></description>
+                <description>Druck auf Bauch, Massage der Bauchorgane, gegen Verstopfung, Mut, Selbstbewusstsein, energetisierend.</description>
             </asana>            
             <asana>
                 <title>Heuschrecke - Śalabhāsana</title>
                 <durationSeconds>60</durationSeconds>
-                <description></description>
+                <description>Stärkung der Rücken- und Gesäßmuskulatur, Willenskraft, Durchsetzungsvermögen, Chakras in der Suṣumnā.</description>
             </asana>            
             <asana>
                 <title>Bogen + Schaukelbogen - Dhanurāsana</title>
                 <durationSeconds>120</durationSeconds>
-                <description></description>
+                <description>Verdauung angeregt, Blutstau im Bauchbereich, Gefühl der Erhabenheit, Aktivierung des Sonnengeflechts</description>
             </asana>            
             <asana>
                 <title>Kind - Balāsana</title>
                 <durationSeconds>60</durationSeconds>
-                <description></description>
-            </asana>                   
+                <description>Rückenmuskeln gedehnt, Massage der Bauchorgane, Urvertrauen, Demut, Loslassen, Sonnengeflecht aktiviert, Energien harmonisiert.</description>
+            </asana>                  
             <asana>
                 <title>Halber Drehsitz - Ardha Matsyendrāsana</title>
-                <durationSeconds>240</durationSeconds>
-                <description></description>
+                <durationSeconds>260</durationSeconds>
+                <description>Heilt nervöse Leiden, Bauchorgane wie ein Schwamm ausgewrungen, inneres Gleichgewicht, Würde, energetisch wichtigste Übung</description>
             </asana>                   
             <asana>
                 <title>Krähe - Kākāsana</title>
                 <durationSeconds>180</durationSeconds>
-                <description></description>
+                <description>Kräftigung der Handgelenke und Armmuskeln, Gleichgewicht und Willenskraft, aktivierend und gleichzeitig harmonisierend.</description>
             </asana>            
             <asana>
                 <title>Stehende Vorwärtsbeuge - Pāda Hastāsana</title>
                 <durationSeconds>180</durationSeconds>
-                <description></description>
+                <description>Sehnen in den Kniekehlen, Gehirndurchblutung, Demut und Hingabe, belebend und energetisierend.</description>
             </asana>            
             <asana>
                 <title>Dreieck - Trikoṇāsana</title>
-                <durationSeconds>240</durationSeconds>
-                <description></description>
+                <durationSeconds>260</durationSeconds>
+                <description>Dehnung der Seiten, Stärkung der Beine, Öffnung der Hüften, Verbesserung der Balance</description>
             </asana>            
             <asana>
                 <title>Schlussentspannung - Śavāsana</title>
                 <durationSeconds>600</durationSeconds>
-                <description></description>
+                <description>Progressive Muskelentspannung, Autosuggestion, Traumreise, Affirmation</description>
             </asana>
+            <asana>
+                <title>Oṃ</title>
+                <durationSeconds>180</durationSeconds>
+                <description>Oṃ Śānti, Frieden, Gruß an den Meister</description>
+            </asana> 
         </asanas>
     </sequence>
 </sequences>
-
