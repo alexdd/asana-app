@@ -60,8 +60,42 @@ jobs:
           APK-Dateien sind als Assets verfügbar.
         draft: false
         prerelease: false
+        generate_release_notes: false
         files: |
           releases/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Remove Source Code Archives from Release
+      run: |
+        VERSION_TAG="${{ steps.version.outputs.version_tag }}"
+        REPO="${{ github.repository }}"
+        
+        # Get release ID using GitHub API
+        RELEASE_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          "https://api.github.com/repos/$REPO/releases/tags/$VERSION_TAG")
+        RELEASE_ID=$(echo "$RELEASE_RESPONSE" | jq -r '.id')
+        
+        if [ -z "$RELEASE_ID" ] || [ "$RELEASE_ID" = "null" ]; then
+          echo "Could not find release ID for tag $VERSION_TAG"
+          exit 1
+        fi
+        
+        echo "Found release ID: $RELEASE_ID"
+        
+        # Get all assets and delete source code archives (zip and tar.gz)
+        ASSETS_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          "https://api.github.com/repos/$REPO/releases/$RELEASE_ID/assets")
+        
+        echo "$ASSETS_RESPONSE" | jq -r '.[] | select(.name | test("\\.(zip|tar\\.gz)$")) | "\(.id)|\(.name)"' | while IFS='|' read -r asset_id asset_name; do
+          if [ -n "$asset_id" ]; then
+            echo "Deleting source code archive: $asset_name (ID: $asset_id)"
+            curl -s -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/$REPO/releases/assets/$asset_id"
+          fi
+        done
+        
+        echo "Source code archives removed from release"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
