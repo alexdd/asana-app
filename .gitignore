@@ -4,6 +4,9 @@ build/
 local.properties
 **/build/
 
+# APK files in build output (but allow releases/ directory)
+app/build/outputs/apk/**/*.apk
+
 # Android Studio / IntelliJ
 .idea/
 *.iml

@@ -1,0 +1,90 @@
+name: Create Release from APK
+
+on:
+  push:
+    paths:
+      - 'releases/*.apk'
+    branches:
+      - master
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Find APK files
+      id: find-apk
+      run: |
+        APK_FILES=$(find releases -name "*.apk" -type f | sort)
+        if [ -z "$APK_FILES" ]; then
+          echo "No APK files found in releases/"
+          exit 1
+        fi
+        echo "Found APK files:"
+        echo "$APK_FILES"
+        # Store as multiline string
+        echo "apk_files<<EOF" >> $GITHUB_OUTPUT
+        echo "$APK_FILES" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Extract version from build.gradle.kts
+      id: version
+      run: |
+        # Extract version from build.gradle.kts
+        VERSION_NAME=$(grep -oP 'versionName\s*=\s*"\K[^"]+' app/build.gradle.kts || echo "1.1")
+        VERSION_CODE=$(grep -oP 'versionCode\s*=\s*\K[0-9]+' app/build.gradle.kts || echo "2")
+        
+        VERSION_TAG="v${VERSION_NAME}"
+        
+        echo "version_tag=$VERSION_TAG" >> $GITHUB_OUTPUT
+        echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+        echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+        echo "Extracted version: $VERSION_TAG (Code: $VERSION_CODE)"
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.version.outputs.version_tag }}
+        name: Release ${{ steps.version.outputs.version_tag }}
+        body: |
+          Version ${{ steps.version.outputs.version_name }} (Code: ${{ steps.version.outputs.version_code }})
+          
+          APK-Dateien sind als Assets verfügbar.
+        draft: false
+        prerelease: false
+        files: |
+          releases/*.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Clean up APK files from repository
+      run: |
+        # Remove APK files from git after successful release
+        APK_FILES="${{ steps.find-apk.outputs.apk_files }}"
+        echo "$APK_FILES" | while IFS= read -r apk_file; do
+          if [ -f "$apk_file" ]; then
+            echo "Removing $apk_file from repository"
+            git rm "$apk_file" || true
+          fi
+        done
+        
+        # Commit the removal if there are changes
+        if [ -n "$(git status --porcelain)" ]; then
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: remove APK files after release creation [skip ci]" || true
+          git push || true
+        else
+          echo "No APK files to remove"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

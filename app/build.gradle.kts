@@ -82,3 +82,62 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
+// Task zum Kopieren der APK nach releases/ und Hinzufügen zu Git
+tasks.register("copyApkToReleases") {
+    group = "release"
+    description = "Kopiert die gebaute APK nach releases/ und fügt sie zu Git hinzu"
+    
+    doLast {
+        val releasesDir = rootProject.file("releases")
+        releasesDir.mkdirs()
+        
+        // Finde die gebaute APK (Release oder Debug) - neueste zuerst
+        val apkFiles = fileTree("build/outputs/apk") {
+            include("**/*.apk")
+        }.sortedByDescending { it.lastModified() }
+        
+        if (apkFiles.isEmpty()) {
+            throw GradleException("Keine APK-Datei gefunden. Bitte zuerst 'assembleRelease' oder 'assembleDebug' ausführen.")
+        }
+        
+        // Nimm nur die neueste APK (normalerweise die gerade gebaute)
+        val apkFile = apkFiles.first()
+        val versionName = android.defaultConfig.versionName
+        val buildType = apkFile.parentFile.name // debug oder release
+        val targetFileName = "app-${buildType}-v${versionName}.apk"
+        val targetFile = File(releasesDir, targetFileName)
+        
+        println("Kopiere ${apkFile.name} nach releases/${targetFileName}")
+        apkFile.copyTo(targetFile, overwrite = true)
+        
+        // Füge zu Git hinzu
+        try {
+            val gitAddProcess = ProcessBuilder("git", "add", targetFile.absolutePath)
+                .directory(rootProject.projectDir)
+                .start()
+            gitAddProcess.waitFor()
+            
+            if (gitAddProcess.exitValue() == 0) {
+                println("✓ APK zu Git hinzugefügt: releases/${targetFileName}")
+            } else {
+                println("⚠ Warnung: Git add fehlgeschlagen (möglicherweise nicht in einem Git-Repository)")
+            }
+        } catch (e: Exception) {
+            println("⚠ Warnung: Git add fehlgeschlagen: ${e.message}")
+        }
+        
+        println("\n✓ APK erfolgreich nach releases/ kopiert und zu Git hinzugefügt")
+        println("  Führe 'git commit' und 'git push' aus, um das Release zu erstellen")
+    }
+}
+
+// Automatisch nach assembleRelease/assembleDebug ausführen
+afterEvaluate {
+    tasks.named("assembleRelease") {
+        finalizedBy("copyApkToReleases")
+    }
+    tasks.named("assembleDebug") {
+        finalizedBy("copyApkToReleases")
+    }
+}
+
