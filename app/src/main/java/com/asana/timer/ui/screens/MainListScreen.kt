@@ -1,5 +1,6 @@
 package com.asana.timer.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -32,14 +34,23 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.shape.CircleShape
+import com.asana.timer.LocationSyncState
+import com.asana.timer.LocationSyncStatus
 import com.asana.timer.data.AsanaSequence
+import com.asana.timer.ui.theme.Accent
+import com.asana.timer.ui.theme.Danger
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,18 +64,43 @@ fun MainListScreen(
 ) {
     val deleteCandidate: MutableState<AsanaSequence?> = remember { mutableStateOf(null) }
 
+    val syncStatus by LocationSyncStatus.status.collectAsState()
+    val lastError by LocationSyncStatus.lastErrorMessage.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Column {
-                        Text(
-                            text = "Yoga Asana Timer",
-                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
-                        )
-                        Text(
-                            text = "Organisiere deine Sequenzen",
-                            style = MaterialTheme.typography.bodyMedium
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text(
+                                text = "Yoga Asana Timer",
+                                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
+                            )
+                            Text(
+                                text = "Organisiere deine Sequenzen",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+
+                        // Status indicator (mit Abstand zum rechten Rand)
+                        val indicatorColor: Color = when (syncStatus) {
+                            LocationSyncState.SUCCESS -> Accent
+                            LocationSyncState.FAILURE -> Danger
+                            LocationSyncState.UNKNOWN -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .padding(end = 12.dp)
+                                .size(12.dp)
+                                .clip(CircleShape)
+                                .background(indicatorColor)
                         )
                     }
                 }
@@ -76,25 +112,32 @@ fun MainListScreen(
             }
         }
     ) { innerPadding ->
-        if (sequences.isEmpty()) {
-            EmptyState(modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding), onCreate = onCreate)
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(sequences, key = { it.id }) { sequence ->
-                    SequenceCard(
-                        sequence = sequence,
-                        onStart = { onStart(sequence.id) },
-                        onEdit = { onEdit(sequence.id) },
-                        onDelete = { deleteCandidate.value = sequence }
-                    )
+        Column(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+            if (lastError != null) {
+                Text(
+                    text = "Sync: $lastError",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                )
+            }
+            if (sequences.isEmpty()) {
+                EmptyState(modifier = Modifier.fillMaxSize(), onCreate = onCreate)
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(sequences, key = { it.id }) { sequence ->
+                        SequenceCard(
+                            sequence = sequence,
+                            onStart = { onStart(sequence.id) },
+                            onEdit = { onEdit(sequence.id) },
+                            onDelete = { deleteCandidate.value = sequence }
+                        )
+                    }
                 }
             }
         }

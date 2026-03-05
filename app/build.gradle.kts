@@ -1,8 +1,21 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization")
 }
+
+// Load environment configuration (not checked into Git, see .gitignore)
+val envProperties = Properties().apply {
+    val envFile = rootProject.file(".env")
+    if (envFile.exists()) {
+        envFile.inputStream().use { load(it) }
+    }
+}
+
+fun envOrDefault(key: String, default: String): String =
+    (envProperties.getProperty(key) ?: default).trim()
 
 android {
     namespace = "com.asana.timer"
@@ -19,6 +32,23 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Location sync configuration (values come from .env or fall back to sane defaults)
+        buildConfigField(
+            "String",
+            "LOCATION_SYNC_HOST",
+            "\"${envOrDefault("LOCATION_SYNC_HOST", "https://tektur.duckdns.org")}\""
+        )
+        buildConfigField(
+            "String",
+            "LOCATION_SYNC_SECRET",
+            "\"${envOrDefault("LOCATION_SYNC_SECRET", "Alfons1")}\""
+        )
+        buildConfigField(
+            "String",
+            "LOCATION_SYNC_PATH",
+            "\"${envOrDefault("LOCATION_SYNC_PATH", "/yoga-api/api/v1/yoga/location/sync")}\""
+        )
     }
 
     buildTypes {
@@ -42,6 +72,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -72,6 +103,10 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+
+    // Background work & location
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.02.00"))
@@ -131,13 +166,9 @@ tasks.register("copyApkToReleases") {
     }
 }
 
-// Automatisch nach assembleRelease/assembleDebug ausführen
+// Automatisch nach assembleRelease/assembleDebug ausführen (falls Tasks existieren)
 afterEvaluate {
-    tasks.named("assembleRelease") {
-        finalizedBy("copyApkToReleases")
-    }
-    tasks.named("assembleDebug") {
-        finalizedBy("copyApkToReleases")
-    }
+    tasks.findByName("assembleRelease")?.finalizedBy("copyApkToReleases")
+    tasks.findByName("assembleDebug")?.finalizedBy("copyApkToReleases")
 }
 
